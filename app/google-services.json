@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "114253362386",
+    "project_id": "fitfam-b275a",
+    "storage_bucket": "fitfam-b275a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114253362386:android:a287ce57209f7b96a7290b",
+        "android_client_info": {
+          "package_name": "com.brentcodes.fitfamapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr8icMhqRXfb3d2ykB-LM3pYFT0tT6N-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
