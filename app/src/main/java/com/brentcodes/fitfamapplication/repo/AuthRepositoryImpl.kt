@@ -1,19 +1,45 @@
 package com.brentcodes.fitfamapplication.repo
 
-import com.google.firebase.auth.AuthResult
+import android.widget.Toast
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class AuthRepositoryImpl : AuthRepository {
-    override val currentUser: FirebaseUser?
-        get() = TODO("Not yet implemented")
+class AuthRepositoryImpl @Inject constructor(): AuthRepository {
 
-    override fun loginUser(email: String, password: String): Flow<Response<AuthResult>> {
-        TODO("Not yet implemented")
+    override val currentUser: Flow<FirebaseUser?>
+        get() = callbackFlow {
+            Firebase.auth.currentUser
+        }
+
+    override val currentUserId: String
+        get() = Firebase.auth.currentUser?.uid.orEmpty()
+
+    override fun hasUser(): Boolean {
+        return Firebase.auth.currentUser != null
     }
 
-    override fun registerUser(email: String, password: String): Flow<Response<AuthResult>> {
-        TODO("Not yet implemented")
+    override suspend fun signIn(email: String, password: String) {
+        Firebase.auth.signInWithEmailAndPassword(email, password).await()
     }
+
+    override suspend fun signUp(email: String, password: String) {
+        Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+    }
+
+    override suspend fun signOut() {
+        Firebase.auth.signOut()
+    }
+
+    override suspend fun deleteAccount() {
+        Firebase.auth.currentUser!!.delete().await()
+    }
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.brentcodes.fitfamapplication.ui.screens
+package com.brentcodes.fitfamapplication.ui.screens.profile
 
 import androidx.compose.runtime.Composable
 

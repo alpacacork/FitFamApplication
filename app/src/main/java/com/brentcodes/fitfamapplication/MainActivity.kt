@@ -6,14 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.brentcodes.fitfamapplication.ui.screens.HomeScreen
-import com.brentcodes.fitfamapplication.ui.screens.LaunchScreen
+import com.brentcodes.fitfamapplication.ui.screens.TestScreen
+import com.brentcodes.fitfamapplication.ui.screens.TestSignInScreen
+import com.brentcodes.fitfamapplication.ui.screens.TestSignUpScreen
+import com.brentcodes.fitfamapplication.ui.screens.signin.SignInScreen
+import com.brentcodes.fitfamapplication.ui.screens.signup.SignUpScreen
 import com.brentcodes.fitfamapplication.ui.theme.FitFamApplicationTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,25 +26,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LaunchScreen()
+                    SignUpScreen()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FitFamApplicationTheme {
-        Greeting("Android")
     }
 }
