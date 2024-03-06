@@ -51,6 +51,10 @@ class SignUpViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     authRepository.signUp(email.value, password.value)
+                    if (authRepository.hasUser()) {
+                        //navigate to home page with user content
+                        Log.d("Signup", "User created: ${authRepository.currentUserId}")
+                    }
                 } catch (e: Exception) {
                     Log.d("Exception", e.message!!)
                 }
