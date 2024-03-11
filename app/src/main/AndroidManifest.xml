@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitFamApplication"
         tools:targetApi="31"
-        android:name = ".app.FitFamHiltApp">
+        android:name = ".app.FitFamApp">
         <activity
             android:name=".MainActivity"
             android:exported="true"
