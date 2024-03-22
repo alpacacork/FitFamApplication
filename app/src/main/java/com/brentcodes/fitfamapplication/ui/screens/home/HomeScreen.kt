@@ -1,9 +1,6 @@
 package com.brentcodes.fitfamapplication.ui.screens.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,9 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.brentcodes.fitfamapplication.R
 import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModel
+import com.brentcodes.fitfamapplication.ui.screens.DateBoxWeek
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
 import com.brentcodes.fitfamapplication.ui.theme.DarkerGray
-import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.WeekDay
@@ -151,7 +148,7 @@ fun TopBar() {
         WeekCalendar (
             state = stateOfCalendar,
             dayContent = {day ->
-                DateBox(day, current = day.date==currentDate, selected = day.date == selection?.date) { clicked ->
+                DateBoxWeek(day, current = day.date==currentDate, selected = day.date == selection?.date) { clicked ->
                     selection = if (selection == clicked) null else clicked
                 }
             }
@@ -173,43 +170,6 @@ fun Day(day: WeekDay) {
         Text(text = day.date.dayOfMonth.toString())
     }
 }
-
-@Composable
-fun DateBox(
-    day : WeekDay,
-    current : Boolean,
-    selected: Boolean,
-    workedOut : Boolean = false,
-    onClick : (WeekDay) -> Unit = {}
-) {
-    val bgColor = if (current) RedAccent else BackgroundGray
-    val border = if (selected) Color.White else Color.Transparent
-
-    Box(
-        modifier = Modifier
-            .size(50.dp)
-            .padding(5.dp)
-            .shadow(
-                elevation = 10.dp,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .border(BorderStroke(2.dp, border))
-//            .clip(RoundedCornerShape(5.dp))
-            .background(bgColor)
-            .clickable (
-                onClick = {onClick(day)}
-            )
-    ) {
-        Text(
-            text = day.date.dayOfMonth.toString(),
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.White,
-            fontSize = 16.sp
-        )
-    }
-}
-
-
 
 @Composable
 fun HomeScreenSection(

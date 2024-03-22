@@ -8,6 +8,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Sports
+import androidx.compose.material.icons.filled.SportsGymnastics
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,9 +37,9 @@ fun BottomNavBar(navController: NavController = rememberNavController()) {
             selectedRoute = destination.route
         }
         BottomNavigationItem(
-            selected = selectedRoute == Screen.HomeScreen.route,
+            selected = selectedRoute == Screen.AuthenticatedScreen.HomeScreen.route,
             onClick = {
-                navController.navigate(Screen.HomeScreen.route)
+                navController.navigate(Screen.AuthenticatedScreen.HomeScreen.route)
             },
             icon = {
                 Icon(
@@ -47,14 +49,15 @@ fun BottomNavBar(navController: NavController = rememberNavController()) {
                 )
                    },
             label = { androidx.compose.material.Text("Home") },
+            alwaysShowLabel = false,
             selectedContentColor = RedAccent,
             unselectedContentColor = Color.LightGray
         )
 
         BottomNavigationItem(
-            selected = selectedRoute == Screen.PlanScreen.route,
+            selected = selectedRoute == Screen.AuthenticatedScreen.PlanScreen.route,
             onClick = {
-                navController.navigate(Screen.PlanScreen.route)
+                navController.navigate(Screen.AuthenticatedScreen.PlanScreen.route)
             },
             icon = {
                 Icon(
@@ -64,14 +67,33 @@ fun BottomNavBar(navController: NavController = rememberNavController()) {
                 )
             },
             label = { androidx.compose.material.Text("Plan") },
+            alwaysShowLabel = false,
             selectedContentColor = RedAccent,
             unselectedContentColor = Color.LightGray
         )
 
         BottomNavigationItem(
-            selected = selectedRoute == Screen.ProfileScreen.route,
+            selected = selectedRoute == Screen.AuthenticatedScreen.WorkoutScreen.route,
             onClick = {
-                navController.navigate(Screen.ProfileScreen.route)
+                navController.navigate(Screen.AuthenticatedScreen.WorkoutScreen.route)
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.SportsGymnastics,
+                    contentDescription = "Workout Icon",
+                    modifier = Modifier.shadow(elevation = 5.dp)
+                )
+            },
+            label = { androidx.compose.material.Text("Workout") },
+            alwaysShowLabel = false,
+            selectedContentColor = RedAccent,
+            unselectedContentColor = Color.LightGray
+        )
+
+        BottomNavigationItem(
+            selected = selectedRoute == Screen.AuthenticatedScreen.ProfileScreen.route,
+            onClick = {
+                navController.navigate(Screen.AuthenticatedScreen.ProfileScreen.route)
             },
             icon = {
                 Icon(
@@ -81,6 +103,7 @@ fun BottomNavBar(navController: NavController = rememberNavController()) {
                 )
                    },
             label = { androidx.compose.material.Text("Profile") },
+            alwaysShowLabel = false,
             selectedContentColor = RedAccent,
             unselectedContentColor = Color.LightGray
         )

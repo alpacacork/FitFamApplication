@@ -3,13 +3,21 @@ package com.brentcodes.fitfamapplication
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.brentcodes.fitfamapplication.ui.screens.CustomScaffold
 import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.screens.home.HomeScreen
 import com.brentcodes.fitfamapplication.ui.screens.launch.LaunchScreen
@@ -17,6 +25,7 @@ import com.brentcodes.fitfamapplication.ui.screens.plan.PlanScreen
 import com.brentcodes.fitfamapplication.ui.screens.profile.ProfileScreen
 import com.brentcodes.fitfamapplication.ui.screens.signin.SignInScreen
 import com.brentcodes.fitfamapplication.ui.screens.signup.SignUpScreen
+import com.brentcodes.fitfamapplication.ui.screens.workout.WorkoutScreen
 import com.brentcodes.fitfamapplication.ui.theme.FitFamApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,37 +42,59 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
+                    var bottomBar by remember {mutableStateOf(true)}
 
-                    NavHost(navController = navController, startDestination = Screen.SignUpScreen.route) {
+                    navController.addOnDestinationChangedListener { _, destination, _ ->
+                        bottomBar = when (destination.route) {
+                            Screen.AuthenticatedScreen.HomeScreen.route,
+                            Screen.AuthenticatedScreen.PlanScreen.route,
+                            Screen.AuthenticatedScreen.WorkoutScreen.route,
+                            Screen.AuthenticatedScreen.ProfileScreen.route -> true
 
-                        //Launch Screen
-                        composable(route = Screen.LaunchScreen.route) {
-                            LaunchScreen()
+                            else -> false
                         }
+                    }
 
-                        //Sign Up Screen
-                        composable(route = Screen.SignUpScreen.route) {
-                            SignUpScreen()
-                        }
+                    CustomScaffold(navController = navController, bottomBar = bottomBar) {
+                        NavHost(
+                            modifier = Modifier.padding(it),
+                            navController = navController,
+                            startDestination = Screen.AuthenticatedScreen.route
+                        ) {
 
-                        //Sign In Screen
-                        composable(route = Screen.SignInScreen.route) {
-                            SignInScreen()
-                        }
+                            //Launch Screen
+                            composable(route = Screen.LaunchScreen.route) {
+                                LaunchScreen()
+                            }
 
-                        //Home Screen
-                        composable(route = Screen.HomeScreen.route) {
-                            HomeScreen()
-                        }
+                            //Sign Up Screen
+                            composable(route = Screen.SignUpScreen.route) {
+                                SignUpScreen()
+                            }
 
-                        //Plan Screen
-                        composable(route = Screen.PlanScreen.route) {
-                            PlanScreen()
-                        }
+                            //Sign In Screen
+                            composable(route = Screen.SignInScreen.route) {
+                                SignInScreen()
+                            }
 
-                        //Profile Screen
-                        composable(route = Screen.ProfileScreen.route) {
-                            ProfileScreen()
+                            navigation(
+                                route = Screen.AuthenticatedScreen.route,
+                                startDestination = Screen.AuthenticatedScreen.HomeScreen.route
+                            ) {
+                                composable(route = Screen.AuthenticatedScreen.HomeScreen.route) {
+                                    HomeScreen()
+                                }
+                                composable(route = Screen.AuthenticatedScreen.PlanScreen.route) {
+                                    PlanScreen()
+                                }
+                                composable(route = Screen.AuthenticatedScreen.WorkoutScreen.route) {
+                                    WorkoutScreen()
+                                }
+                                composable(route = Screen.AuthenticatedScreen.ProfileScreen.route) {
+                                    ProfileScreen()
+                                }
+                            }
+
                         }
                     }
                 }
