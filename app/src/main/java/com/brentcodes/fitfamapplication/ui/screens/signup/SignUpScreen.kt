@@ -1,5 +1,6 @@
 package com.brentcodes.fitfamapplication.ui.screens.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,11 +16,16 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,21 +35,25 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.brentcodes.fitfamapplication.ui.screens.CustomTextField
+import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.screens.launch.LaunchCard
 import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 
 @Preview
 @Composable
-fun SignUpScreen() {
-    TestSignUpScreen()
+fun SignUpScreen(navController: NavController = rememberNavController()) {
+    TestSignUpScreen(navController = navController)
 }
 
 @Composable
 fun TestSignUpScreen(
-    textColor : Color = Color.White,
+    textColor: Color = Color.White,
     fontSize: TextUnit = 12.sp,
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navController: NavController = rememberNavController()
 ) {
 
     LaunchCard {
@@ -51,6 +61,23 @@ fun TestSignUpScreen(
         val email by viewModel.email.collectAsState()
         val password by viewModel.password.collectAsState()
         val confirmpassword by viewModel.confirmpassword.collectAsState()
+        val currentUser by viewModel.currentUser.collectAsState()
+        val context = LocalContext.current
+
+            when (currentUser) {
+                loggedInState.loggedin -> navController.navigate(Screen.AuthenticatedScreen.route)
+                loggedInState.loggedout -> {}
+                loggedInState.error -> {
+                    Toast.makeText(context, "Unable to Sign Up", Toast.LENGTH_SHORT).show()
+                    viewModel.clearState()
+                }
+                loggedInState.invalidinput -> {
+                    Toast.makeText(context, "Invalid Inputs", Toast.LENGTH_SHORT).show()
+                    viewModel.clearState()
+                }
+            }
+
+
 
         Column(
             modifier = Modifier
@@ -159,17 +186,25 @@ fun TestSignUpScreen(
             ElevatedButton(
                 onClick = {
                     viewModel.signUp()
+
                 },
-                colors = ButtonDefaults.elevatedButtonColors(containerColor = RedAccent, contentColor = Color.White)
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = RedAccent,
+                    contentColor = Color.White
+                )
             ) {
                 Text("Sign Up", color = Color.White, fontWeight = FontWeight.Bold)
             }
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                 Text(text = "Have an account?", color = Color.White, fontSize = fontSize)
                 Spacer(Modifier.width(5.dp))
-                ClickableText(text = AnnotatedString("Sign In", spanStyle = SpanStyle(color = RedAccent, fontSize = fontSize)), onClick = {
+                ClickableText(
+                    text = AnnotatedString(
+                        "Sign In",
+                        spanStyle = SpanStyle(color = RedAccent, fontSize = fontSize)
+                    ), onClick = {
 
-                })
+                    })
             }
         }
     }

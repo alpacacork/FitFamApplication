@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,12 +31,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.brentcodes.fitfamapplication.R
 import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModel
 import com.brentcodes.fitfamapplication.ui.screens.DateBoxWeek
+import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
 import com.brentcodes.fitfamapplication.ui.theme.DarkerGray
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -47,9 +50,15 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Calendar
 
-@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavController
+) {
+    val state = viewModel.userState.collectAsState()
+
+
+
     Column(
         Modifier
             .fillMaxSize()
@@ -57,40 +66,73 @@ fun HomeScreen() {
     ) {
         TopBar()
         Spacer(Modifier.height(20.dp))
-        LazyColumn {
-            item {
-                HomeScreenSection(
-                    sectionTitle = "Plans",
-                    sectionSubtitle = "Design a custom plan",
-                    sectionCards = listOf(
-                        HomeScreenSectionCardModel(10, "Bicep Routine", "Strengthen", R.drawable.bicepsimage),
-                        HomeScreenSectionCardModel(20, "Leg Workout", "Push with legs", R.drawable.legsimage),
-                        HomeScreenSectionCardModel(10, "Chest Press", "Get bigger pecs", R.drawable.chestimage)
-                    )
-                )
+
+        when (state.value) {
+            LoggedinState.loading -> {
+                Text(text = "I am loading!!")
             }
-            item {
-                HomeScreenSection(
-                    sectionTitle = "Performance",
-                    sectionCards = listOf(
-                        HomeScreenSectionCardModel(10, "Bicep Routine", "Strengthen"),
-                        HomeScreenSectionCardModel(20, "Leg Workout", "Push with legs"),
-                        HomeScreenSectionCardModel(10, "Chest Press", "Get bigger pecs")
-                    )
-                )
+
+            is LoggedinState.loggedIn -> {
+                mainBody()
             }
-            item {
-                HomeScreenSection(
-                    sectionTitle = "Meals",
-                    sectionCards = listOf(
-                        HomeScreenSectionCardModel(10, "Bicep Routine", "Strengthen"),
-                        HomeScreenSectionCardModel(20, "Leg Workout", "Push with legs"),
-                        HomeScreenSectionCardModel(10, "Chest Press", "Get bigger pecs")
-                    )
-                )
-            }
+            LoggedinState.loggedout -> navController.navigate(Screen.SignUpScreen.route)
         }
+
         //BottomNavBar()
+    }
+
+
+}
+
+@Composable
+fun mainBody() {
+    LazyColumn {
+        item {
+            HomeScreenSection(
+                sectionTitle = "Plans",
+                sectionSubtitle = "Design a custom plan",
+                sectionCards = listOf(
+                    HomeScreenSectionCardModel(
+                        10,
+                        "Bicep Routine",
+                        "Strengthen",
+                        R.drawable.bicepsimage
+                    ),
+                    HomeScreenSectionCardModel(
+                        20,
+                        "Leg Workout",
+                        "Push with legs",
+                        R.drawable.legsimage
+                    ),
+                    HomeScreenSectionCardModel(
+                        10,
+                        "Chest Press",
+                        "Get bigger pecs",
+                        R.drawable.chestimage
+                    )
+                )
+            )
+        }
+        item {
+            HomeScreenSection(
+                sectionTitle = "Performance",
+                sectionCards = listOf(
+                    HomeScreenSectionCardModel(10, "Bicep Routine", "Strengthen"),
+                    HomeScreenSectionCardModel(20, "Leg Workout", "Push with legs"),
+                    HomeScreenSectionCardModel(10, "Chest Press", "Get bigger pecs")
+                )
+            )
+        }
+        item {
+            HomeScreenSection(
+                sectionTitle = "Meals",
+                sectionCards = listOf(
+                    HomeScreenSectionCardModel(10, "Bicep Routine", "Strengthen"),
+                    HomeScreenSectionCardModel(20, "Leg Workout", "Push with legs"),
+                    HomeScreenSectionCardModel(10, "Chest Press", "Get bigger pecs")
+                )
+            )
+        }
     }
 }
 
@@ -120,15 +162,16 @@ fun TopBar() {
         firstDayOfWeek = firstDayOfWeek
     )
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .height(height)
-        .shadow(
-            elevation = 10.dp,
-            shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
-        )
-        .background(DarkerGray)
-        .padding(10.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+            .shadow(
+                elevation = 10.dp,
+                shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
+            )
+            .background(DarkerGray)
+            .padding(10.dp)
     ) {
         val greeting = if (currentTime < 12) {
             "Good Morning, Brent."
@@ -142,13 +185,18 @@ fun TopBar() {
             text = greeting,
             color = Color.White,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp)
+            fontSize = 20.sp
+        )
         Text(text = "Well done! You have completed one workout this week!", color = Color.White)
         Spacer(modifier = Modifier.height(5.dp))
-        WeekCalendar (
+        WeekCalendar(
             state = stateOfCalendar,
-            dayContent = {day ->
-                DateBoxWeek(day, current = day.date==currentDate, selected = day.date == selection?.date) { clicked ->
+            dayContent = { day ->
+                DateBoxWeek(
+                    day,
+                    current = day.date == currentDate,
+                    selected = day.date == selection?.date
+                ) { clicked ->
                     selection = if (selection == clicked) null else clicked
                 }
             }
@@ -179,14 +227,19 @@ fun HomeScreenSection(
 ) {
     Column {
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-            Text(text = "$sectionTitle>>", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 20.sp)
+            Text(
+                text = "$sectionTitle>>",
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                fontSize = 20.sp
+            )
             if (sectionSubtitle != null) {
                 Text(text = "$sectionSubtitle>>", color = Color.LightGray)
             }
         }
 
         LazyRow {
-            items(sectionCards) {card ->
+            items(sectionCards) { card ->
                 HomeScreenSectionCard(sectionCard = card)
             }
         }
@@ -196,7 +249,7 @@ fun HomeScreenSection(
 
 @Composable
 fun HomeScreenSectionCard(
-    sectionCard : HomeScreenSectionCardModel
+    sectionCard: HomeScreenSectionCardModel
 ) {
     val gradient = remember {
         Brush.verticalGradient(
@@ -206,21 +259,29 @@ fun HomeScreenSectionCard(
         )
     }
 
-    Box(modifier = Modifier
-        .size(sectionCard.width.dp, sectionCard.height.dp)
-        .padding(10.dp)
-        .clip(RoundedCornerShape(10.dp))
-        .paint(
-            painterResource(id = sectionCard.image),
-            contentScale = ContentScale.FillBounds
-        )
-        .background(gradient)
+    Box(
+        modifier = Modifier
+            .size(sectionCard.width.dp, sectionCard.height.dp)
+            .padding(10.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .paint(
+                painterResource(id = sectionCard.image),
+                contentScale = ContentScale.FillBounds
+            )
+            .background(gradient)
     ) {
-        Column(modifier = Modifier
-            .align(Alignment.BottomStart)
-            .padding(5.dp)) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(5.dp)
+        ) {
             Text(text = "${sectionCard.duration} mins", color = Color.White, fontSize = 16.sp)
-            Text(text = sectionCard.title, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(
+                text = sectionCard.title,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
             Text(text = sectionCard.subtitle, color = Color.LightGray)
         }
     }

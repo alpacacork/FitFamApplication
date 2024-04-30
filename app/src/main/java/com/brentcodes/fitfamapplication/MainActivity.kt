@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    var bottomBar by remember {mutableStateOf(true)}
+                    var bottomBar by remember { mutableStateOf(true) }
 
                     navController.addOnDestinationChangedListener { _, destination, _ ->
                         bottomBar = when (destination.route) {
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(
                             modifier = Modifier.padding(it),
                             navController = navController,
-                            startDestination = Screen.AuthenticatedScreen.route
+                            startDestination = Screen.SignUpScreen.route
                         ) {
 
                             //Launch Screen
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
                             //Sign Up Screen
                             composable(route = Screen.SignUpScreen.route) {
-                                SignUpScreen()
+                                SignUpScreen(navController)
                             }
 
                             //Sign In Screen
@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                                 startDestination = Screen.AuthenticatedScreen.HomeScreen.route
                             ) {
                                 composable(route = Screen.AuthenticatedScreen.HomeScreen.route) {
-                                    HomeScreen()
+                                    HomeScreen(navController = navController)
                                 }
                                 composable(route = Screen.AuthenticatedScreen.PlanScreen.route) {
                                     PlanScreen()
