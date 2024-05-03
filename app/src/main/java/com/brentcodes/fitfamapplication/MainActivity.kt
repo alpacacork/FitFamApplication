@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
 
                                 navigation(
                                     route = Screen.AuthenticatedScreen.WorkoutScreens.route,
-                                    startDestination = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutDetailsScreen.route
+                                    startDestination = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route
                                 ) {
                                     composable(route = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route) {
                                         WorkoutScreen()
