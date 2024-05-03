@@ -59,6 +59,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
 
     //Hilt-Dagger
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
