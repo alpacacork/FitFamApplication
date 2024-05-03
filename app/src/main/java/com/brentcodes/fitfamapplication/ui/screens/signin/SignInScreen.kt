@@ -1,5 +1,6 @@
 package com.brentcodes.fitfamapplication.ui.screens.signin
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,26 +46,46 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.brentcodes.fitfamapplication.ui.screens.CustomTextField
+import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.screens.launch.LaunchCard
+import com.brentcodes.fitfamapplication.ui.screens.signin.loggedInState
 import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 
 @Preview
 @Composable
-fun SignInScreen() {
-    TestSignInScreen()
+fun SignInScreen(navController: NavController = rememberNavController()) {
+    TestSignInScreen(navController = navController)
 }
 
 @Composable
 fun TestSignInScreen(
     textColor : Color = Color.White,
     fontSize: TextUnit = 12.sp,
-    viewModel: SignInViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel(),
+    navController: NavController = rememberNavController()
 ) {
     LaunchCard {
 
         val email by viewModel.email.collectAsState()
         val password by viewModel.password.collectAsState()
+        val currentUser by viewModel.currentUser.collectAsState()
+        val context = LocalContext.current
+
+        when (currentUser) {
+            loggedInState.loggedin -> navController.navigate(Screen.AuthenticatedScreen.route)
+            loggedInState.loggedout -> {}
+            loggedInState.error -> {
+                Toast.makeText(context, "Unable to Sign Up", Toast.LENGTH_SHORT).show()
+                viewModel.clearState()
+            }
+            loggedInState.invalidinput -> {
+                Toast.makeText(context, "Invalid Inputs", Toast.LENGTH_SHORT).show()
+                viewModel.clearState()
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -142,7 +164,9 @@ fun TestSignInScreen(
             )
             Spacer(modifier = Modifier.height(30.dp))
             ElevatedButton(
-                onClick = { },
+                onClick = {
+                    viewModel.signIn()
+                },
                 colors = ButtonDefaults.elevatedButtonColors(containerColor = RedAccent, contentColor = Color.White)
             ) {
                 Text("Sign In", color = Color.White, fontWeight = FontWeight.Bold)
@@ -151,7 +175,7 @@ fun TestSignInScreen(
                 Text(text = "Don't have an account?", color = Color.White, fontSize = fontSize)
                 Spacer(Modifier.width(5.dp))
                 ClickableText(text = AnnotatedString("Sign Up", spanStyle = SpanStyle(color = RedAccent, fontSize = fontSize)), onClick = {
-
+                    navController.navigate(Screen.SignUpScreen.route)
                 })
             }
         }

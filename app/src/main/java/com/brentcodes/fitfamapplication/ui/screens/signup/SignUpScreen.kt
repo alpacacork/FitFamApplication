@@ -203,7 +203,7 @@ fun TestSignUpScreen(
                         "Sign In",
                         spanStyle = SpanStyle(color = RedAccent, fontSize = fontSize)
                     ), onClick = {
-
+                        navController.navigate(Screen.SignInScreen.route)
                     })
             }
         }

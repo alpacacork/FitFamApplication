@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
 
                             //Sign In Screen
                             composable(route = Screen.SignInScreen.route) {
-                                SignInScreen()
+                                SignInScreen(navController)
                             }
 
                             navigation(
