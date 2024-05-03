@@ -243,7 +243,6 @@ fun HomeScreenSection(
                 HomeScreenSectionCard(sectionCard = card)
             }
         }
-
     }
 }
 

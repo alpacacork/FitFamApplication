@@ -25,6 +25,7 @@ import com.brentcodes.fitfamapplication.ui.screens.plan.PlanScreen
 import com.brentcodes.fitfamapplication.ui.screens.profile.ProfileScreen
 import com.brentcodes.fitfamapplication.ui.screens.signin.SignInScreen
 import com.brentcodes.fitfamapplication.ui.screens.signup.SignUpScreen
+import com.brentcodes.fitfamapplication.ui.screens.workout.WorkoutDetailsScreen
 import com.brentcodes.fitfamapplication.ui.screens.workout.WorkoutScreen
 import com.brentcodes.fitfamapplication.ui.theme.FitFamApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +49,8 @@ class MainActivity : ComponentActivity() {
                         bottomBar = when (destination.route) {
                             Screen.AuthenticatedScreen.HomeScreen.route,
                             Screen.AuthenticatedScreen.PlanScreen.route,
-                            Screen.AuthenticatedScreen.WorkoutScreen.route,
+                            Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route,
+                            Screen.AuthenticatedScreen.WorkoutScreens.WorkoutDetailsScreen.route,
                             Screen.AuthenticatedScreen.ProfileScreen.route -> true
 
                             else -> false
@@ -87,8 +89,17 @@ class MainActivity : ComponentActivity() {
                                 composable(route = Screen.AuthenticatedScreen.PlanScreen.route) {
                                     PlanScreen()
                                 }
-                                composable(route = Screen.AuthenticatedScreen.WorkoutScreen.route) {
-                                    WorkoutScreen()
+
+                                navigation(
+                                    route = Screen.AuthenticatedScreen.WorkoutScreens.route,
+                                    startDestination = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutDetailsScreen.route
+                                ) {
+                                    composable(route = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route) {
+                                        WorkoutScreen()
+                                    }
+                                    composable(route = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutDetailsScreen.route) {
+                                        WorkoutDetailsScreen()
+                                    }
                                 }
                                 composable(route = Screen.AuthenticatedScreen.ProfileScreen.route) {
                                     ProfileScreen()

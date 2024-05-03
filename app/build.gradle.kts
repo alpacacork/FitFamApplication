@@ -73,6 +73,9 @@ dependencies {
     val vico_version = "2.0.0-alpha.12"
     implementation("com.patrykandpatrick.vico:compose-m3:$vico_version")
 
+    //More Icons
+    //implementation("br.com.devsrsouza.compose.icons:{ICON_PACK}:1.1.0")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 

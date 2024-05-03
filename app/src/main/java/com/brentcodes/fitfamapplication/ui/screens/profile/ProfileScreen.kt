@@ -29,6 +29,7 @@ import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.columnSeries
 import java.time.Month
+import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -38,7 +39,7 @@ fun ProfileScreen() {
     //RECENT WORKOUTS
 
     val name = "Brent Cenci"
-    val joined = Month.FEBRUARY
+    val joined = YearMonth.now().minusMonths(1)
 
 
     Box(
@@ -63,7 +64,7 @@ fun ProfileScreen() {
                     color = Color.White
                 )
                 Text(
-                    text = "User since ${joined.getDisplayName(TextStyle.FULL, Locale.ENGLISH)}",
+                    text = "User since ${joined.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)}",
                     color = Color.White
                 )
             }
