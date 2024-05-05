@@ -35,7 +35,7 @@ class AuthRepositoryImpl @Inject constructor(): AuthRepository {
         Firebase.auth.signInWithEmailAndPassword(email, password).await()
         Log.d("SignIn", "Signing in with $email and $password")
         val user = currentUserId
-        Log.d("SignIn", "Current user: $user")
+        Log.d("SignIn", "Signed in as current user: $user")
 
         val data = mapOf("name" to "Brent Cenci", "level" to 12)
         if (user.isNotEmpty()) {
