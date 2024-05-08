@@ -52,10 +52,6 @@ fun ProfileScreen() {
     val joined = Instant.ofEpochMilli(monthJoinedTimestamp?: 1).atZone(ZoneId.systemDefault())
     val context = LocalContext.current
 
-    //Toast.makeText(context, "User: ${Firebase.auth.currentUser?.email}", Toast.LENGTH_SHORT).show()
-    //Toast.makeText(context, "User: ${Firebase.auth.currentUser?.metadata?.creationTimestamp}", Toast.LENGTH_SHORT).show()
-    //Log.d("User", monthJoinedTimestamp.toString())
-
 
     Box(
         Modifier

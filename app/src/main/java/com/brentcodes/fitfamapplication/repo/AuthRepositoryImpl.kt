@@ -2,6 +2,7 @@ package com.brentcodes.fitfamapplication.repo
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.collectAsState
 import com.google.firebase.Firebase
 import com.google.firebase.app
 import com.google.firebase.auth.FirebaseAuth
@@ -12,14 +13,13 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(): AuthRepository {
 
-    override val currentUser: Flow<FirebaseUser?>
-        get() = callbackFlow {
-            Firebase.auth.currentUser
-        }
+    override val currentUser: FirebaseUser?
+        get() = Firebase.auth.currentUser
 
     override val currentUserId: String
         get() = Firebase.auth.currentUser?.uid.orEmpty()
@@ -29,6 +29,12 @@ class AuthRepositoryImpl @Inject constructor(): AuthRepository {
 
     override fun hasUser(): Boolean {
         return Firebase.auth.currentUser != null
+    }
+
+    override suspend fun getUserJoinLong(): Long {
+        if (hasUser()) {
+            return currentUser!!.metadata!!.creationTimestamp
+        } else return -1
     }
 
     override suspend fun signIn(email: String, password: String) {
