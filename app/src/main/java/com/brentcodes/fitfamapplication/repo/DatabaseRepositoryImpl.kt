@@ -12,11 +12,12 @@ class DatabaseRepositoryImpl @Inject constructor(): DatabaseRepository {
         get() = Firebase.firestore
 
     override suspend fun addExercise(exercises: List<Exercise>, name: String, desc: String) {
-        TODO("Not yet implemented")
+        val data = mapOf("exercises" to exercises, "name" to name, "desc" to desc)
+        db.collection("exercises").document().set(data)
     }
 
     override suspend fun removeExercise(workoutId: String) {
-        TODO("Not yet implemented")
+        db.collection("exercises").document(workoutId).delete()
     }
 
     override suspend fun editExercise(
@@ -25,7 +26,8 @@ class DatabaseRepositoryImpl @Inject constructor(): DatabaseRepository {
         name: String,
         desc: String
     ) {
-        TODO("Not yet implemented")
+        val data = mapOf("exercises" to exercises, "name" to name, "desc" to desc)
+        db.collection("exercises").document(workoutId).set(data)
     }
 
     override suspend fun addWorkout(exercises: List<Exercise>, name: String, desc: String) {
