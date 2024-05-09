@@ -11,31 +11,30 @@ class DatabaseRepositoryImpl @Inject constructor(): DatabaseRepository {
     override val db: FirebaseFirestore
         get() = Firebase.firestore
 
-    override suspend fun addExercise(exercises: List<Exercise>, name: String, desc: String) {
-        val data = mapOf("exercises" to exercises, "name" to name, "desc" to desc)
-        db.collection("exercises").document().set(data)
+    override suspend fun addExercise(name: String, reps: Int, sets: Int) {
+        val data = mapOf("name" to name, "reps" to reps, "sets" to sets)
+        val doc = db.collection("exercises").document()
+        doc.set(data)
+        //NEED TO PASS ID TO LOGGED IN USER
     }
 
-    override suspend fun removeExercise(workoutId: String) {
-        db.collection("exercises").document(workoutId).delete()
+    override suspend fun removeExercise(exerciseId: String) {
+        db.collection("exercises").document(exerciseId).delete()
+        //ALSO NEED TO CONSIDER IF THE EXERCISE IS IN A WORKOUT?
     }
 
-    override suspend fun editExercise(
-        workoutId: String,
-        exercises: List<Exercise>,
-        name: String,
-        desc: String
-    ) {
-        val data = mapOf("exercises" to exercises, "name" to name, "desc" to desc)
-        db.collection("exercises").document(workoutId).set(data)
+    override suspend fun editExercise(exerciseId: String, name: String, reps: Int, sets: Int) {
+        val data = mapOf("name" to name, "reps" to reps, "sets" to sets)
+        db.collection("exercises").document(exerciseId).set(data)
     }
 
     override suspend fun addWorkout(exercises: List<Exercise>, name: String, desc: String) {
-        TODO("Not yet implemented")
+        val data = mapOf("exercises" to exercises, "name" to name, "desc" to desc)
+        db.collection("workouts").document().set(data)
     }
 
     override suspend fun removeWorkout(workoutId: String) {
-        TODO("Not yet implemented")
+        db.collection("workouts").document(workoutId).delete()
     }
 
     override suspend fun editWorkout(
@@ -44,7 +43,8 @@ class DatabaseRepositoryImpl @Inject constructor(): DatabaseRepository {
         name: String,
         desc: String
     ) {
-        TODO("Not yet implemented")
+        val data = mapOf("exercises" to exercises, "name" to name, "desc" to desc)
+        db.collection("workouts").document(workoutId).set(data)
     }
 
     override suspend fun scheduleWorkout(workoutId: String, date: Date) {

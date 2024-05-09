@@ -8,11 +8,11 @@ interface DatabaseRepository {
     val db: FirebaseFirestore
 
     ////EXERCISE FUNCTIONS////
-    suspend fun addExercise(exercises: List<Exercise>, name: String, desc: String)
+    suspend fun addExercise(name: String, reps: Int, sets: Int)
 
-    suspend fun removeExercise(workoutId: String)
+    suspend fun removeExercise(exerciseId: String)
 
-    suspend fun editExercise(workoutId: String, exercises: List<Exercise>, name: String, desc: String)
+    suspend fun editExercise(exerciseId: String, name: String, reps: Int, sets: Int)
 
 
     ////WORKOUT FUNCTIONS////
