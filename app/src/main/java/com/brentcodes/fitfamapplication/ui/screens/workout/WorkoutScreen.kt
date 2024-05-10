@@ -1,6 +1,8 @@
 package com.brentcodes.fitfamapplication.ui.screens.workout
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -39,16 +41,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.brentcodes.fitfamapplication.R
 import com.brentcodes.fitfamapplication.model.Workout
 import com.brentcodes.fitfamapplication.ui.modifyColor
+import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
 import com.brentcodes.fitfamapplication.ui.theme.DarkerGray
 import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 
 
 @Composable
-fun WorkoutScreen() {
+fun WorkoutScreen(navController: NavController) {
     val workouts = remember {
       listOf(
           Workout(1, "Arms", Color.Red),
@@ -104,16 +108,18 @@ fun WorkoutScreen() {
             }
             LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.padding(top = 10.dp, start = 15.dp, end = 15.dp)) {
                 items(workouts) {workout ->
-                    WorkoutCard(workout = workout)
+                    WorkoutCard(workout = workout, onClick = {
+                        navController.navigate(Screen.AuthenticatedScreen.WorkoutScreen.WorkoutDetailsScreen.route)
+                        Log.d("nav", "navigating to workoutdetailscreen")
+                    })
                 }
             }
         }
     }
 }
 
-@Preview
 @Composable
-fun WorkoutCard(modifier: Modifier = Modifier, workout: Workout = Workout(1, "Workout")) {
+fun WorkoutCard(modifier: Modifier = Modifier, workout: Workout = Workout(1, "Workout"), onClick: () -> Unit) {
 
     val durationId = "durationIcon"
     val durationText = buildAnnotatedString {
@@ -159,6 +165,7 @@ fun WorkoutCard(modifier: Modifier = Modifier, workout: Workout = Workout(1, "Wo
             .aspectRatio(1f)
             .padding(15.dp)
             .background(gradient, RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
     ){
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.muscle_24),

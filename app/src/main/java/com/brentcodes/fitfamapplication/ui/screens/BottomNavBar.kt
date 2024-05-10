@@ -73,9 +73,9 @@ fun BottomNavBar(navController: NavController = rememberNavController()) {
         )
 
         BottomNavigationItem(
-            selected = selectedRoute == Screen.AuthenticatedScreen.WorkoutScreens.route,
+            selected = selectedRoute == Screen.AuthenticatedScreen.WorkoutScreen.route,
             onClick = {
-                navController.navigate(Screen.AuthenticatedScreen.WorkoutScreens.route)
+                navController.navigate(Screen.AuthenticatedScreen.WorkoutScreen.route)
             },
             icon = {
                 Icon(

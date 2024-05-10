@@ -35,15 +35,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModel
 import com.brentcodes.fitfamapplication.ui.screens.home.HomeScreenSectionCard
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
 import com.brentcodes.fitfamapplication.ui.theme.DarkerGray
 import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 
-@Preview
 @Composable
-fun WorkoutDetailsScreen(modifier: Modifier = Modifier) {
+fun WorkoutDetailsScreen(modifier: Modifier = Modifier, navController: NavController) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(BackgroundGray)

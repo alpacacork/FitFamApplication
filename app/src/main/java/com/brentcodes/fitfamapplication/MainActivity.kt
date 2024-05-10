@@ -49,8 +49,8 @@ class MainActivity : ComponentActivity() {
                         bottomBar = when (destination.route) {
                             Screen.AuthenticatedScreen.HomeScreen.route,
                             Screen.AuthenticatedScreen.PlanScreen.route,
-                            Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route,
-                            Screen.AuthenticatedScreen.WorkoutScreens.WorkoutDetailsScreen.route,
+                            Screen.AuthenticatedScreen.WorkoutScreen.WorkoutScreen.route,
+                            Screen.AuthenticatedScreen.WorkoutScreen.WorkoutDetailsScreen.route,
                             Screen.AuthenticatedScreen.ProfileScreen.route -> true
 
                             else -> false
@@ -91,14 +91,14 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 navigation(
-                                    route = Screen.AuthenticatedScreen.WorkoutScreens.route,
-                                    startDestination = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route
+                                    route = Screen.AuthenticatedScreen.WorkoutScreen.route,
+                                    startDestination = Screen.AuthenticatedScreen.WorkoutScreen.WorkoutScreen.route
                                 ) {
-                                    composable(route = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutScreen.route) {
-                                        WorkoutScreen()
+                                    composable(route = Screen.AuthenticatedScreen.WorkoutScreen.WorkoutScreen.route) {
+                                        WorkoutScreen(navController)
                                     }
-                                    composable(route = Screen.AuthenticatedScreen.WorkoutScreens.WorkoutDetailsScreen.route) {
-                                        WorkoutDetailsScreen()
+                                    composable(route = Screen.AuthenticatedScreen.WorkoutScreen.WorkoutDetailsScreen.route) {
+                                        WorkoutDetailsScreen(navController = navController)
                                     }
                                 }
                                 composable(route = Screen.AuthenticatedScreen.ProfileScreen.route) {
