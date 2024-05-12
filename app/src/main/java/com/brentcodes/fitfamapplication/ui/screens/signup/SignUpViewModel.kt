@@ -78,6 +78,21 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun testBtnSignIn(email: String = "email@emails.com", password: String = "abaabaaba") {
+        viewModelScope.launch {
+            try {
+                authRepository.signIn(email, password)
+                if (!authRepository.hasUser()) return@launch
+
+                Log.d("SignIn", "Signed in as Test User: ${authRepository.currentUserId}")
+                _currentUser.value = loggedInState.loggedin
+            } catch (e: Exception) {
+                Log.d("Exception", e.message!!)
+                _currentUser.value = loggedInState.error
+            }
+        }
+    }
+
     fun clearState() {
         _currentUser.value = loggedInState.loggedout
     }

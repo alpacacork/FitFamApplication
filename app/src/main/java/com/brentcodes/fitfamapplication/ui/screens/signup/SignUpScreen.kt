@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -64,21 +65,19 @@ fun TestSignUpScreen(
         val currentUser by viewModel.currentUser.collectAsState()
         val context = LocalContext.current
 
-            when (currentUser) {
-                loggedInState.loggedin -> navController.navigate(Screen.AuthenticatedScreen.route)
-                loggedInState.loggedout -> {}
-                loggedInState.error -> {
-                    Toast.makeText(context, "Unable to Sign Up", Toast.LENGTH_SHORT).show()
-                    viewModel.clearState()
-                }
-                loggedInState.invalidinput -> {
-                    Toast.makeText(context, "Invalid Inputs", Toast.LENGTH_SHORT).show()
-                    viewModel.clearState()
-                }
+        when (currentUser) {
+            loggedInState.loggedin -> navController.navigate(Screen.AuthenticatedScreen.route)
+            loggedInState.loggedout -> {}
+            loggedInState.error -> {
+                Toast.makeText(context, "Unable to Sign Up", Toast.LENGTH_SHORT).show()
+                viewModel.clearState()
             }
-
-
-
+            loggedInState.invalidinput -> {
+                Toast.makeText(context, "Invalid Inputs", Toast.LENGTH_SHORT).show()
+                viewModel.clearState()
+            }
+        }
+        
         Column(
             modifier = Modifier
                 .padding(horizontal = 40.dp),
@@ -205,6 +204,9 @@ fun TestSignUpScreen(
                     ), onClick = {
                         navController.navigate(Screen.SignInScreen.route)
                     })
+            }
+            Button(onClick = { viewModel.testBtnSignIn()} ) {
+                Text(text = "Test Sign In")
             }
         }
     }

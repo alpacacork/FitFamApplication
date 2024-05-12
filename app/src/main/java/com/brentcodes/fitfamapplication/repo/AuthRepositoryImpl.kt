@@ -54,6 +54,12 @@ class AuthRepositoryImpl @Inject constructor(): AuthRepository {
 
     override suspend fun signUp(email: String, password: String) {
         Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+        val data = mapOf("name" to "Brent Cenci", "level" to 12)
+        if (currentUserId.isNotEmpty()) {
+            //do something to generate user file?
+            Log.d("SignUp", "Attempting to create db collection with db : ${db.collection("users").path}")
+            db.collection("users").document(currentUserId).set(data)
+        }
     }
 
     override suspend fun signOut() {
