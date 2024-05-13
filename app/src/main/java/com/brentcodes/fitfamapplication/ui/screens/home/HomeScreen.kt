@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.brentcodes.fitfamapplication.R
 import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModel
+import com.brentcodes.fitfamapplication.repo.AuthRepository
 import com.brentcodes.fitfamapplication.ui.screens.DateBoxWeek
 import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
@@ -145,6 +146,7 @@ fun TopBar() {
     var selection by remember {
         mutableStateOf<WeekDay?>(null)
     }
+
 
     val height = if (selection != null) 160.dp else 120.dp
 

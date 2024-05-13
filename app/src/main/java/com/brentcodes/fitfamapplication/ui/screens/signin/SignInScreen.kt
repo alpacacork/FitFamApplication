@@ -68,7 +68,7 @@ fun TestSignInScreen(
     navController: NavController = rememberNavController()
 ) {
     LaunchCard {
-
+        
         val email by viewModel.email.collectAsState()
         val password by viewModel.password.collectAsState()
         val currentUser by viewModel.currentUser.collectAsState()

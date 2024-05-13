@@ -1,5 +1,6 @@
 package com.brentcodes.fitfamapplication.ui.screens.signup
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -59,6 +60,7 @@ fun TestSignUpScreen(
 
     LaunchCard {
 
+        val name by viewModel.name.collectAsState()
         val email by viewModel.email.collectAsState()
         val password by viewModel.password.collectAsState()
         val confirmpassword by viewModel.confirmpassword.collectAsState()
@@ -97,6 +99,35 @@ fun TestSignUpScreen(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "Name",
+                fontSize = fontSize,
+                lineHeight = 16.sp,
+                color = textColor,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(bottom = 5.dp)
+            )
+            CustomTextField(
+                value = name,
+                onValueChange = {
+                    viewModel.setName(it)
+                },
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                        RoundedCornerShape(percent = 50)
+                    )
+                    .padding(5.dp)
+                    .height(24.dp),
+                fontSize = 14.sp,
+                placeholderText = "John Smith",
+                isPassword = false
+            )
+
+            Spacer(Modifier.height(10.dp))
 
             Text(
                 text = "Email",
@@ -181,7 +212,7 @@ fun TestSignUpScreen(
                 placeholderText = "Confirm Password",
                 isPassword = true
             )
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             ElevatedButton(
                 onClick = {
                     viewModel.signUp()
@@ -205,9 +236,15 @@ fun TestSignUpScreen(
                         navController.navigate(Screen.SignInScreen.route)
                     })
             }
-            Button(onClick = { viewModel.testBtnSignIn()} ) {
-                Text(text = "Test Sign In")
+            Row {
+                Button(onClick = { viewModel.testBtnSignIn()} ) {
+                    Text(text = "Test Sign In")
+                }
+                Button(onClick = { viewModel.currentAuthStatus() }) {
+                    Text(text = "Auth status")
+                }
             }
+
         }
     }
 }

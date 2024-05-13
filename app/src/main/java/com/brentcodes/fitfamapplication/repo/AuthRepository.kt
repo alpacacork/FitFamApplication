@@ -16,7 +16,7 @@ interface AuthRepository {
     fun hasUser(): Boolean
     suspend fun getUserJoinLong(): Long
     suspend fun signIn(email: String, password: String)
-    suspend fun signUp(email: String, password: String)
+    suspend fun signUp(name: String = "Placeholder", email: String, password: String)
     suspend fun signOut()
     suspend fun deleteAccount()
 }

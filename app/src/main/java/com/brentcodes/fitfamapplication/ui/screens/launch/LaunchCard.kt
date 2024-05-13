@@ -40,7 +40,7 @@ fun LaunchCard(
             .align(Alignment.Center)
             .clip(RoundedCornerShape(20.dp))
             .background(DarkerGray)
-            .size(300.dp, 500.dp)
+            .size(300.dp, 600.dp)
         ) {
 
             val textColor = remember {
