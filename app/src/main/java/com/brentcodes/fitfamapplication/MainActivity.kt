@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                                 composable(route = Screen.AuthenticatedScreen.ProfileScreen.route) {
-                                    ProfileScreen()
+                                    ProfileScreen(navController = navController)
                                 }
                             }
 
