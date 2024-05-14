@@ -150,7 +150,8 @@ fun PlanScreen() {
        ModalBottomSheet(
            onDismissRequest = {showBottomSheet = false},
            sheetState = sheetState,
-           containerColor = DarkerGray
+           containerColor = DarkerGray,
+           contentColor = Color.White
        ) {
            PlanSchedulePopup()
        }
