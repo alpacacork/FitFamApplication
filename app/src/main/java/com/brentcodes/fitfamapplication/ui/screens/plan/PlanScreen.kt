@@ -149,11 +149,10 @@ fun PlanScreen() {
     if (showBottomSheet) {
        ModalBottomSheet(
            onDismissRequest = {showBottomSheet = false},
-           sheetState = sheetState
+           sheetState = sheetState,
+           containerColor = DarkerGray
        ) {
-           Text(text = "Schedule Workout", fontSize = 24.sp)
-           Text(text = "This is where you can schedule workout stuff for selected day")
-           Text(text = "Pretty poggers, amirite?")
+           PlanSchedulePopup()
        }
     }
 
