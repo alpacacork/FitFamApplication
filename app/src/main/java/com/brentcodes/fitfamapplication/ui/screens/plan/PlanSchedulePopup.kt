@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,6 +43,8 @@ fun PlanSchedulePopup(modifier: Modifier = Modifier) {
         val openDatePickerDialog = remember { mutableStateOf(false) }
         val timeState = rememberTimePickerState(is24Hour = false)
         val openTimePickerDialog = remember { mutableStateOf(false) }
+        val selectedDropdownItem = remember { "" }
+        val openWorkoutDropdown = remember { mutableStateOf(false) }
 
         //Instant.ofEpochMilli(monthJoinedTimestamp?: 1).atZone(ZoneId.systemDefault())
         val dateSelected = if (dateState.selectedDateMillis == null) "Unselected" else Instant.ofEpochMilli(dateState.selectedDateMillis!!).atZone(
@@ -60,6 +64,12 @@ fun PlanSchedulePopup(modifier: Modifier = Modifier) {
             Text("Time:", fontWeight = FontWeight.Bold)
             TextButton(onClick = { openTimePickerDialog.value = true }) {
                 Text(text = String.format("%02d:%02d", timeHours, timeMinutes), color = Color.LightGray, textDecoration = TextDecoration.Underline)
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically){
+            Text("Workout", fontWeight = FontWeight.Bold)
+            TextButton(onClick = { openWorkoutDropdown.value = true }) {
+                Text(text = "Select Workout", color = Color.LightGray, textDecoration = TextDecoration.Underline)
             }
         }
         
@@ -87,7 +97,15 @@ fun PlanSchedulePopup(modifier: Modifier = Modifier) {
             ) {
                 TimeInput(state = timeState, modifier = Modifier.padding(20.dp))
             }
-
+        }
+        if (openWorkoutDropdown.value) {
+            DropdownMenu(
+                expanded = openWorkoutDropdown.value,
+                onDismissRequest = { openWorkoutDropdown.value = false }) {
+                DropdownMenuItem(text = { Text("Arms") }, onClick = { })
+                DropdownMenuItem(text = { Text("Legs") }, onClick = { })
+                DropdownMenuItem(text = { Text("Back") }, onClick = { })
+            }
         }
     }
 }
