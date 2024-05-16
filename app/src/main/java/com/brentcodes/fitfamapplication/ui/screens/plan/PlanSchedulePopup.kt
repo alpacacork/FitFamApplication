@@ -1,6 +1,7 @@
 package com.brentcodes.fitfamapplication.ui.screens.plan
 
 import android.app.TimePickerDialog
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,6 +52,7 @@ fun PlanSchedulePopup(modifier: Modifier = Modifier) {
             ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE)
         val timeMinutes = timeState.minute
         val timeHours = timeState.hour
+        var timeSelected = remember { mutableStateOf(false) }
 
         Text(text = "Schedule Workout", fontSize = 32.sp)
         Spacer(modifier = Modifier.height(10.dp))
@@ -92,7 +94,12 @@ fun PlanSchedulePopup(modifier: Modifier = Modifier) {
             DatePickerDialog(
                 modifier = Modifier.padding(20.dp),
                 onDismissRequest = { openTimePickerDialog.value = false} ,
-                confirmButton = { Button(onClick = { openTimePickerDialog.value = false }) { Text("CONFIRM") } },
+                confirmButton = { Button(onClick = {
+                    openTimePickerDialog.value = false
+                    timeSelected.value = true
+                    Log.d("TimePicker", "Confirmed time")
+                }
+                ) { Text("CONFIRM") } },
                 dismissButton = { Button(onClick = { openTimePickerDialog.value = false }) { Text("CANCEL") } }
             ) {
                 TimeInput(state = timeState, modifier = Modifier.padding(20.dp))
@@ -105,6 +112,12 @@ fun PlanSchedulePopup(modifier: Modifier = Modifier) {
                 DropdownMenuItem(text = { Text("Arms") }, onClick = { })
                 DropdownMenuItem(text = { Text("Legs") }, onClick = { })
                 DropdownMenuItem(text = { Text("Back") }, onClick = { })
+            }
+        }
+
+        if (dateSelected != "Unselected" && timeSelected.value) {
+            Button(onClick = { Log.d("Schedule", "Scheduling workout for $dateSelected") }) {
+                Text("Schedule!")
             }
         }
     }
