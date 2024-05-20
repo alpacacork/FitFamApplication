@@ -10,11 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Logout
+import androidx.compose.material.icons.rounded.Logout
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -28,6 +35,7 @@ import androidx.navigation.NavController
 import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
 import com.brentcodes.fitfamapplication.ui.theme.DarkerGray
+import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -65,7 +73,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(BackgroundGray)
     ) {
-        Column {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .shadow(
@@ -96,10 +104,14 @@ fun ProfileScreen(
                 ),
                 modelProducer,
             )
-            Button(onClick = {
-                viewModel.signOut()
-                navController.navigate(Screen.SignUpScreen.route)
-            } ) {
+            Button(
+                onClick = {
+                    viewModel.signOut()
+                    navController.navigate(Screen.SignUpScreen.route)
+                },
+                colors= ButtonColors(RedAccent, Color.White, RedAccent, Color.White)
+            ) {
+                Icon(imageVector = Icons.AutoMirrored.Rounded.Logout, contentDescription = "Logout Icon", tint = Color.White)
                 Text("Sign Out")
             }
         }

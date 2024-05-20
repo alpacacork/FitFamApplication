@@ -21,11 +21,17 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -46,11 +52,13 @@ import com.brentcodes.fitfamapplication.R
 import com.brentcodes.fitfamapplication.model.Workout
 import com.brentcodes.fitfamapplication.ui.modifyColor
 import com.brentcodes.fitfamapplication.ui.screens.Screen
+import com.brentcodes.fitfamapplication.ui.screens.plan.PlanSchedulePopup
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
 import com.brentcodes.fitfamapplication.ui.theme.DarkerGray
 import com.brentcodes.fitfamapplication.ui.theme.RedAccent
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutScreen(navController: NavController) {
     val workouts = remember {
@@ -64,13 +72,15 @@ fun WorkoutScreen(navController: NavController) {
           Workout(1, "Back", Color.Blue)
       )
     }
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
         .fillMaxSize()
         .background(BackgroundGray)
     ) {
         FloatingActionButton(
-            onClick = { },
+            onClick = { showBottomSheet = true },
             containerColor = RedAccent,
             contentColor = Color.White,
             modifier = Modifier
@@ -82,6 +92,24 @@ fun WorkoutScreen(navController: NavController) {
                 contentDescription = "Add Workout Button",
                 tint = Color.White
             )
+        }
+        //COME BACK TO THIS - BUTTON NOT AS RESPONSIVE AS PLAN SCREEN
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {showBottomSheet = false},
+                sheetState = sheetState,
+                containerColor = DarkerGray,
+                contentColor = Color.White
+            ) {
+                Column(
+                    modifier = Modifier.padding(10.dp)
+                ) {
+                    Text("This is a test modal bottom sheet for adding workouts.")
+                    Text("Add new workout", fontSize = 40.sp, fontWeight = FontWeight.Bold)
+                    Text("Workout title:")
+
+                }
+            }
         }
 
         Column {
