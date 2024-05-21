@@ -1,9 +1,7 @@
 package com.brentcodes.fitfamapplication.model
 
-import android.media.Image
-import androidx.compose.material.icons.Icons
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.Dp
 import com.brentcodes.fitfamapplication.R
 
 data class HomeScreenSectionCardModel(
@@ -19,7 +17,8 @@ data class HomeScreenSectionCardModelNew(
     val duration: Int,
     val exercises: Int,
     val title: String,
-    val icon: ImageVector,
+    val icon: ImageVector? = null,
+    val iconTint: Color,
     val height: Int = 190,
     val width: Int = 240
 )

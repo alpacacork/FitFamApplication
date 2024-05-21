@@ -1,6 +1,7 @@
 package com.brentcodes.fitfamapplication.ui.screens.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,11 +32,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +53,7 @@ import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModel
 import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModelNew
 import com.brentcodes.fitfamapplication.model.Workout
 import com.brentcodes.fitfamapplication.repo.AuthRepository
+import com.brentcodes.fitfamapplication.ui.modifyColor
 import com.brentcodes.fitfamapplication.ui.screens.DateBoxWeek
 import com.brentcodes.fitfamapplication.ui.screens.Screen
 import com.brentcodes.fitfamapplication.ui.theme.BackgroundGray
@@ -89,18 +103,19 @@ fun HomeScreen(
 
 @Composable
 fun mainBody() {
+    //WORKOUTS UNNECESSARY IN ORIGINAL
     val workouts = remember {
         listOf(
-            Workout(1, "Arms", Color.Red),
-            Workout(1, "Legs", Color.Blue),
-            Workout(1, "Chest", Color.Green),
-            Workout(1, "Biceps", Color.Gray),
-            Workout(1, "Triceps", Color.Yellow),
-            Workout(1, "Cardio", Color.Magenta),
-            Workout(1, "Back", Color.Blue)
+            HomeScreenSectionCardModelNew(20, 4, "Arms Workout", iconTint = Color.Red),
+            HomeScreenSectionCardModelNew(16, 3, "Leg Routine", iconTint = Color.Blue),
+            HomeScreenSectionCardModelNew(25, 5, "Core", iconTint = Color.White),
+            HomeScreenSectionCardModelNew(12, 2, "Back Workout", iconTint = Color.Green),
+            HomeScreenSectionCardModelNew(20, 3, "Cardio", iconTint = Color.Cyan)
         )
     }
-    LazyColumn {
+
+
+    /*LazyColumn {
         item {
             HomeScreenSection(
                 sectionTitle = "Plans",
@@ -145,6 +160,27 @@ fun mainBody() {
                     HomeScreenSectionCardModel(20, "Leg Workout", "Push with legs"),
                     HomeScreenSectionCardModel(10, "Chest Press", "Get bigger pecs")
                 )
+            )
+        }
+    }*/
+    LazyColumn {
+        item {
+            HomeScreenSectionNew(
+                sectionTitle = "Plans",
+                sectionSubtitle = "Design a custom plan",
+                sectionCards = workouts
+            )
+        }
+        item {
+            HomeScreenSectionNew(
+                sectionTitle = "Performance",
+                sectionCards = workouts
+            )
+        }
+        item {
+            HomeScreenSectionNew(
+                sectionTitle = "Meals",
+                sectionCards = workouts
             )
         }
     }
@@ -322,7 +358,7 @@ fun HomeScreenSectionNew(
 
         LazyRow {
             items(sectionCards) { card ->
-                HomeScreenSectionCardNew(sectionCard = card)
+                HomeScreenWorkoutCard(sectionCard = card, onClick = {})
             }
         }
     }
@@ -353,5 +389,97 @@ fun HomeScreenSectionCardNew(
             Text(text = "${sectionCard.duration} mins", color = Color.White, fontSize = 16.sp)
             Text(text = "${sectionCard.exercises} mins", color = Color.White, fontSize = 16.sp)
         }
+    }
+}
+
+@Composable
+fun HomeScreenWorkoutCard(
+    modifier: Modifier = Modifier,
+    sectionCard: HomeScreenSectionCardModelNew,
+    onClick: () -> Unit
+) {
+
+    val durationId = "durationIcon"
+    val durationText = buildAnnotatedString {
+        appendInlineContent(durationId, "[icon]")
+        append(" ${sectionCard.duration} Minutes")
+    }
+    val durationInlineContent = mapOf(Pair(durationId, InlineTextContent(
+        Placeholder(
+            width = 12.sp,
+            height = 12.sp,
+            placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+        )
+    ) {
+        Icon(imageVector = Icons.Filled.Timer, contentDescription = "Timer Icon", tint = Color.LightGray, modifier = Modifier.size(12.dp))
+    }))
+
+    val exercisesId = "exercisesIcon"
+    val exercisesText = buildAnnotatedString {
+        appendInlineContent(exercisesId, "[icon]")
+        append(" ${sectionCard.exercises} Exercises")
+    }
+
+    val exercisesInlineContent = mapOf(Pair(exercisesId, InlineTextContent(
+        Placeholder(
+            width = 12.sp,
+            height = 12.sp,
+            placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+        )
+    ) {
+        Icon(imageVector = Icons.AutoMirrored.Filled.List, contentDescription = "List Icon", tint = Color.LightGray, modifier = Modifier.size(12.dp))
+    }))
+
+    val gradient = remember {
+        Brush.verticalGradient(
+            colors = listOf(DarkerGray, Color.DarkGray),
+            startY = 0F,
+            endY = Float.POSITIVE_INFINITY
+        )
+    }
+
+    Box(
+        modifier = modifier
+            .size(sectionCard.width.dp, sectionCard.height.dp)
+            .padding(15.dp)
+            .background(gradient, RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+    ){
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.muscle_24),
+            tint = modifyColor(sectionCard.iconTint, .6f, 0.7f),
+            contentDescription = "Workout Icon",
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .rotate(-30f)
+                .size(70.dp)
+        )
+        androidx.compose.material3.Text(
+            text = sectionCard.title,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(start = 20.dp, bottom = 40.dp),
+            color = Color.White
+        )
+        androidx.compose.material3.Text(
+            text = exercisesText,
+            inlineContent = exercisesInlineContent,
+            color = Color.LightGray,
+            fontSize = 12.sp,
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(20.dp)
+        )
+        androidx.compose.material3.Text(
+            text = durationText,
+            inlineContent = durationInlineContent,
+            color = Color.LightGray,
+            fontSize = 12.sp,
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(start = 20.dp, bottom = 5.dp)
+        )
     }
 }
