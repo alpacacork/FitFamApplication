@@ -37,6 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.brentcodes.fitfamapplication.R
 import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModel
+import com.brentcodes.fitfamapplication.model.HomeScreenSectionCardModelNew
+import com.brentcodes.fitfamapplication.model.Workout
 import com.brentcodes.fitfamapplication.repo.AuthRepository
 import com.brentcodes.fitfamapplication.ui.screens.DateBoxWeek
 import com.brentcodes.fitfamapplication.ui.screens.Screen
@@ -87,6 +89,17 @@ fun HomeScreen(
 
 @Composable
 fun mainBody() {
+    val workouts = remember {
+        listOf(
+            Workout(1, "Arms", Color.Red),
+            Workout(1, "Legs", Color.Blue),
+            Workout(1, "Chest", Color.Green),
+            Workout(1, "Biceps", Color.Gray),
+            Workout(1, "Triceps", Color.Yellow),
+            Workout(1, "Cardio", Color.Magenta),
+            Workout(1, "Back", Color.Blue)
+        )
+    }
     LazyColumn {
         item {
             HomeScreenSection(
@@ -284,6 +297,61 @@ fun HomeScreenSectionCard(
                 fontSize = 18.sp
             )
             Text(text = sectionCard.subtitle, color = Color.LightGray)
+        }
+    }
+}
+
+@Composable
+fun HomeScreenSectionNew(
+    sectionTitle: String,
+    sectionSubtitle: String? = null,
+    sectionCards: List<HomeScreenSectionCardModelNew>
+) {
+    Column {
+        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            Text(
+                text = "$sectionTitle>>",
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                fontSize = 20.sp
+            )
+            if (sectionSubtitle != null) {
+                Text(text = "$sectionSubtitle>>", color = Color.LightGray)
+            }
+        }
+
+        LazyRow {
+            items(sectionCards) { card ->
+                HomeScreenSectionCardNew(sectionCard = card)
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeScreenSectionCardNew(
+    sectionCard: HomeScreenSectionCardModelNew
+) {
+    Box(
+        modifier = Modifier
+            .size(sectionCard.width.dp, sectionCard.height.dp)
+            .padding(10.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(DarkerGray)
+    ) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(5.dp)
+        ) {
+            Text(
+                text = sectionCard.title,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+            Text(text = "${sectionCard.duration} mins", color = Color.White, fontSize = 16.sp)
+            Text(text = "${sectionCard.exercises} mins", color = Color.White, fontSize = 16.sp)
         }
     }
 }
